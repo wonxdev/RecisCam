@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecisCam — Siswa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- 1️⃣ LOAD SUPABASE CDN FIRST -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<!-- 2️⃣ INITIALIZE SUPABASE -->
+<script>
+  (function () {
+    const SUPABASE_URL = "https://whcisuqiafcsxebeuokz.supabase.co";
+    console.log("SUPABASE URL:", SUPABASE_URL);
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoY2lzdXFpYWZjc3hlYmV1b2t6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjUwNjYsImV4cCI6MjA4NTAwMTA2Nn0.F1pm8a9UID1P5Yjbu8NmpH_AJEmsP85O5BJc83UnloQ";
+
+    if (!window.supabaseClient) {
+      window.supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
+    }
+  })();
+  var supabase = window.supabaseClient;
+</script>
+
+
+<body>
+  <!-- Notification Container -->
+  <div id="toast-container" class="notification-container"></div>
+
+  <div class="container">
+    <!-- Header / Stats -->
+    <div class="card" style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: white; border:none;">
+      <h2 style="color:white; margin-bottom:8px;">Halo, <span id="userName">Siswa</span>!</h2>
+      <p style="color: #dcfce7; margin-bottom:16px;" id="userClass">...</p>
+
+      <div style="display:flex; gap:16px;">
+        <div style="background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:12px; flex:1;">
+          <small style="display:block; opacity:0.8;">Jadwal Piket</small>
+          <div style="font-weight:700; font-size:1.1rem;" id="piketDay">...</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:12px; flex:1;">
+          <small style="display:block; opacity:0.8;">Peringatan</small>
+          <div style="font-weight:700; font-size:1.1rem;" id="warningCount">0/3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Upload Bukti Piket</h3>
+      <span class="status-text">Pastikan foto terlihat jelas. Batas upload pukul 15.00 WIB.</span>
+
+      <div class="file-input-wrapper">
+        <button class="btn-upload" type="button">
+          <span style="font-size:32px">📷</span>
+          <span>Ambil Foto / Pilih File</span>
+        </button>
+        <input type="file" id="photo" accept="image/*" capture="environment" onchange="previewFile()">
+      </div>
+
+      <div id="preview" style="display:none; margin-top:16px;">
+        <p style="margin-bottom:8px; font-size:0.875rem;">File terpilih:</p>
+        <div style="font-weight:600;" id="filename"></div>
+        <img id="previewImg" style="width:100%; border-radius:12px; margin-top:8px; display:none;">
+      </div>
+
+      <button onclick="submit()">Kirim Bukti</button>
+    </div>
+
+    <h3>Riwayat & Jadwal</h3>
+    <div id="scheduleList">
+      <p style="text-align:center;">Memuat jadwal...</p>
+    </div>
+
+    <button class="secondary" onclick="logout()" style="margin-top:auto;">Keluar</button>
+
+    <footer>RecisCam — Sistem Piket Sekolah</footer>
+  </div>
+
+  <script>
+    // Check Auth
+    let user = null;
+    let profile = null;
+
+    async function requireAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert("Silakan login ulang.");
+        window.location.replace("index.html");
+        throw new Error("Not authenticated");
+      }
+      return session.user;
+    }
+
+    async function init() {
+      if (!supabase || !supabase.auth) {
+        window.location.replace('index.html');
+        return;
+      }
+
+      // Get authenticated user
+      const currentUser = await requireAuth();
+      user = currentUser;
+
+      // Get Profile
+      const { data: p } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      profile = p;
+
+      // Set UI
+      document.getElementById('userName').innerText = user.email.split('@')[0];
+      document.getElementById('userClass').innerText = (profile && profile.class) ? profile.class : 'Kelas Tidak Ada';
+      document.getElementById('piketDay').innerText = (profile && profile.piket_day) ? profile.piket_day : '-';
+
+      // Load Data
+      if (profile) {
+        loadScheduleAndWarnings();
+        loadNotifications();
+      }
+    }
+
+    async function loadScheduleAndWarnings() {
+      // 1. Get Attendance History
+      const { data: history } = await supabase
+        .from('attendance')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      // 2. Generate Dates (Past 4 weeks + Today)
+      const dayMap = { 'Minggu': 0, 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6 };
+      const targetDay = dayMap[profile.piket_day];
+
+      if (targetDay === undefined) return;
+
+      const list = [];
+      const today = new Date();
+      let warnings = 0;
+
+      for (let i = 0; i < 5; i++) {
+        let d = new Date();
+        d.setDate(d.getDate() - (i * 7));
+        const currentDay = d.getDay();
+        const diff = targetDay - currentDay;
+        d.setDate(d.getDate() + diff);
+        d.setHours(0, 0, 0, 0);
+
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+
+        if (d > now) continue;
+
+        const match = history ? history.find(h => {
+          const hDate = new Date(h.created_at);
+          return hDate.getDate() === d.getDate() &&
+            hDate.getMonth() === d.getMonth() &&
+            hDate.getFullYear() === d.getFullYear();
+        }) : null;
+
+        let status = 'missed';
+        if (match) {
+          status = match.status;
+        } else {
+          if (d.getTime() === now.getTime()) {
+            status = 'upcoming';
+          } else {
+            status = 'missed';
+          }
+        }
+
+        if (status === 'missed' || status === 'absent' || status === 'rejected') {
+          warnings++;
+        }
+
+        list.push({ date: d, status: status, match: match });
+      }
+
+      const warningEl = document.getElementById('warningCount');
+      warningEl.innerText = `${warnings}/3`;
+      if (warnings >= 3) warningEl.style.color = '#f87171';
+
+      const html = list.map(item => {
+        const dateStr = item.date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        let badgeClass = '';
+        let label = '';
+
+        switch (item.status) {
+          case 'approved':
+          case 'present':
+            badgeClass = 'approved';
+            label = 'Hadir';
+            break;
+          case 'rejected':
+          case 'absent':
+            badgeClass = 'rejected';
+            label = 'Ditolak';
+            break;
+          case 'pending':
+            badgeClass = 'pending';
+            label = 'Menunggu';
+            break;
+          case 'missed':
+            badgeClass = 'missed';
+            label = 'Terlewat';
+            break;
+          case 'upcoming':
+            badgeClass = 'pending';
+            label = 'Jadwal Hari Ini';
+            break;
+        }
+
+        return `
+                <div class="card" style="padding:16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-weight:600;">${dateStr}</div>
+                         ${item.match && item.match.note ? `<small style="color:var(--danger-text)">Output Guru: ${item.match.note}</small>` : ''}
+                    </div>
+                    <span class="badge ${badgeClass}">${label}</span>
+                </div>`;
+      }).join('');
+
+      document.getElementById('scheduleList').innerHTML = html;
+    }
+
+    async function loadNotifications() {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_read', false)
+        .order('created_at', { ascending: false });
+
+      if (data && data.length > 0) {
+        const container = document.getElementById('toast-container');
+        data.forEach(n => {
+          const div = document.createElement('div');
+          div.className = 'notification-toast';
+          div.innerHTML = `
+                     <span>${n.message}</span>
+                     <button class="close-toast" onclick="dismiss('${n.id}', this)">×</button>
+                   `;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    async function dismiss(id, btn) {
+      btn.parentElement.remove();
+      await supabase.from('notifications').update({ is_read: true }).eq('id', id);
+    }
+
+    async function submit() {
+      if (!photo.files[0]) {
+        alert("Pilih foto terlebih dahulu!");
+        return;
+      }
+
+      const btn = document.querySelector('button[onclick="submit()"]');
+      btn.innerText = 'Mengirim...';
+      btn.disabled = true;
+
+      try {
+        // 🔐 Ensure user is authenticated
+        const authUser = await requireAuth();
+
+        const file = photo.files[0];
+        const ext = file.name.split('.').pop().toLowerCase();
+        const filePath = `${authUser.id}/${Date.now()}.${ext}`;
+
+        // 📤 UPLOAD TO STORAGE (CRITICAL FIX)
+        const { error: uploadError } = await supabase.storage
+          .from('attendance-photos')
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+            contentType: file.type || 'image/jpeg'
+          });
+
+        if (uploadError) {
+          console.error("UPLOAD ERROR:", uploadError);
+          throw uploadError;
+        }
+
+        // 🌍 GET PUBLIC URL
+        const { data: urlData } = supabase.storage
+          .from('attendance-photos')
+          .getPublicUrl(filePath);
+
+        if (!urlData?.publicUrl) {
+          throw new Error("Gagal mendapatkan URL foto");
+        }
+
+        const imageUrl = urlData.publicUrl;
+
+        // 📝 INSERT ATTENDANCE
+        const { error: insertError } = await supabase
+          .from('attendance')
+          .insert({
+            user_id: authUser.id,
+            photo_url: imageUrl,
+            status: "pending"
+          });
+
+        alert("✅ Laporan piket berhasil dikirim!");
+        location.reload();
+
+      } catch (err) {
+        console.error(err);
+        alert("❌ Gagal mengirim: " + err.message);
+        btn.innerText = 'Kirim Bukti';
+        btn.disabled = false;
+      }
+    }
+
+    function previewFile() {
+      const file = photo.files[0];
+      if (file) {
+        document.getElementById('preview').style.display = 'block';
+        document.getElementById('filename').innerText = file.name;
+        const img = document.getElementById('previewImg');
+        img.style.display = 'block';
+        img.src = URL.createObjectURL(file);
+      }
+    }
+
+    async function logout() {
+      try {
+        if (supabase && supabase.auth) {
+          await supabase.auth.signOut();
+        }
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (err) {
+        console.error("Logout error:", err);
+      } finally {
+        window.location.replace('index.html');
+      }
+    }
+
+    init();
+  </script>
+</body>
+
+</html>

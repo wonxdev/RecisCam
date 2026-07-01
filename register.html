@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar RecisCam</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Daftar Akun</h1>
+      <p>Buat akun baru untuk siswa.</p>
+
+      <label>Email</label>
+      <input id="email" type="email" placeholder="nama@email.com">
+
+      <label>Kata Sandi</label>
+      <input id="password" type="password" placeholder="••••••••">
+
+      <label>Kelas</label>
+      <select id="kelas">
+        <option value="" disabled selected>Pilih Kelas</option>
+        <option>XII A</option>
+        <option>XII B</option>
+        <option>XII C</option>
+        <option>XII D</option>
+        <option>XII E</option>
+        <option>XII F</option>
+        <option>XII G</option>
+        <option>XII H</option>
+        <option>XII I</option>
+        <option>XII J</option>
+      </select>
+
+      <label>Hari Piket</label>
+      <select id="piketDay">
+        <option value="" disabled selected>Pilih Hari</option>
+        <option>Senin</option>
+        <option>Selasa</option>
+        <option>Rabu</option>
+        <option>Kamis</option>
+        <option>Jumat</option>
+      </select>
+
+      <button onclick="register()">Daftar Sekarang</button>
+
+      <div style="text-align:center;">
+        <a href="index.html" class="text-link">Sudah punya akun? Masuk</a>
+      </div>
+    </div>
+
+    <footer>RecisCam — Sistem Piket Sekolah</footer>
+  </div>
+
+  <!-- 1️⃣ Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- 2️⃣ Supabase Init + Logic -->
+  <script>
+    const SUPABASE_URL = "https://whcisuqiafcsxebeuokz.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoY2lzdXFpYWZjc3hlYmV1b2t6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MjUwNjYsImV4cCI6MjA4NTAwMTA2Nn0.F1pm8a9UID1P5Yjbu8NmpH_AJEmsP85O5BJc83UnloQ";
+
+    // Create client ONCE
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    async function register() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const kelas = document.getElementById("kelas").value;
+      const piketDay = document.getElementById("piketDay").value;
+
+      if (!email || !password || !kelas || !piketDay) {
+        alert("Semua kolom wajib diisi!");
+        return;
+      }
+
+      const btn = document.querySelector("button");
+      btn.disabled = true;
+      btn.innerText = "Memproses...";
+
+      try {
+        // 1️⃣ Create auth user
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        // 2️⃣ Create profile
+        await supabaseClient.from("profiles").insert({
+          id: data.user.id,
+          role: "student",
+          class: kelas,
+          piket_day: piketDay
+        });
+
+        alert("Pendaftaran berhasil! Silakan masuk.");
+        window.location.href = "index.html";
+
+      } catch (err) {
+        alert("Gagal daftar: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Daftar Sekarang";
+      }
+    }
+  </script>
+</body>
+
+</html>
