@@ -1,103 +1,176 @@
-# RecisCam — Portfolio Demo
+# RecisCam
+A web-based piket attendance application developed as a Senior High School Informatics project. RecisCam uses camera photo capture to let students submit proof of piket (cleaning duty) attendance, while teachers review, approve, or reject submissions from a single dashboard.
 
-RecisCam is a Progressive Web App (PWA) concept for **school piket (cleaning duty) attendance**, using camera photo capture as proof of attendance. This is the **portfolio version**: it demonstrates the full attendance workflow — login, photo submission, teacher review, and export — entirely in the browser, with **no real backend or database**.
+> **Portfolio Version:** This repository contains a frontend-only demonstration that runs entirely in the browser using LocalStorage. The original project was built with Supabase for authentication, database, and photo storage.
 
-> 🧪 **This is a demo.** All data is sample data generated in your browser's `localStorage`. Nothing is uploaded anywhere, and nothing here represents a real school, student, or teacher.
+---
+
+## Overview
+Piket attendance at my school was tracked manually — students reported their duty completion verbally or through messaging groups, and teachers had no centralized way to verify who had actually completed their piket schedule or follow up on missed days.
+
+RecisCam was designed to solve this by letting students take or upload a photo as proof of attendance directly from their device, while teachers review submissions, approve or reject them with a note, and export the results. Students can track their own schedule, history, and warning count from a single dashboard.
+
+For portfolio purposes, the original Supabase backend has been replaced with a LocalStorage-powered demo that preserves the original application workflow without requiring any external services.
+
+---
 
 ## Features
+- Demo login with two roles
+  - Student
+  - Teacher
+- One-tap demo account switching
+- Camera-based (or file-based) attendance photo submission
+- Piket schedule and attendance history per student
+- Automatic warning count for missed or rejected reports
+- Teacher review dashboard with approve/reject and notes
+- Filter reports by piket day
+- Export attendance reports to Excel
+- In-app notifications for approval/rejection
+- Persistent demo database using LocalStorage
+- Resettable demo environment
 
-- **Student dashboard**
-  - View piket schedule and day of the week assigned
-  - "Upload" a photo as proof of attendance (stored as a filename only in the demo)
-  - See attendance history for the last 5 scheduled weeks
-  - See a running "warning count" for missed/rejected reports
-  - In-app notifications when a teacher approves or rejects a report
-- **Teacher dashboard**
-  - Review all submitted attendance reports
-  - Filter reports by piket day
-  - Approve or reject reports with an optional note
-  - Export the current list to an Excel file (`.xlsx`)
-- **Demo login / registration**
-  - Two ready-made demo accounts (student and teacher) with one-tap login
-  - A registration form that creates a new local student profile
-- A **Portfolio Demo** badge is shown on every page as a reminder that this is a demo
+---
 
-## Technologies
+## Demo Roles
+| Role | Capabilities |
+|------|--------------|
+| **Student** | Submit piket photo proof, view schedule, history, and warnings |
+| **Teacher** | Review, approve/reject reports, filter by day, export to Excel |
 
-- HTML5, CSS3, vanilla JavaScript (no framework, no build step)
-- Browser `localStorage` as a stand-in for a database
-- [SheetJS (xlsx)](https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js) via CDN, for the Excel export feature only
-- Works as a static site — deployable directly on GitHub Pages
+---
 
-## Folder Structure
+## Tech Stack
+### Frontend
+- HTML5
+- CSS3
+- Vanilla JavaScript
 
+### Demo Data Layer
+- Browser LocalStorage
+- Custom JavaScript data abstraction (`DemoStore`)
+
+### Original Backend (Archived)
+- Supabase Authentication
+- PostgreSQL
+- Supabase Storage (attendance photos)
+
+---
+
+## Demo Architecture
+```text
+Browser
+│
+├── LocalStorage
+│   ├── profiles
+│   ├── attendance
+│   └── notifications
+│
+└── RecisCam
+    ├── Student
+    └── Teacher
 ```
-/
+
+---
+
+## Original Architecture
+```text
+Users
+│
+├── Students
+└── Teachers
+        │
+        ▼
+RecisCam
+        │
+        ▼
+Supabase
+├── Authentication
+├── PostgreSQL
+└── Storage
+        │
+        ▼
+Database
+├── profiles
+├── attendance
+└── notifications
+```
+
+---
+
+## Project Structure
+```text
+.
 ├── assets/
 │   ├── css/
-│   │   └── style.css        # All page styling
 │   ├── js/
-│   │   ├── app.js           # Shared helpers (demo badge, auth guard, logout)
-│   │   ├── demo-store.js    # Fake backend backed by localStorage
-│   │   ├── index.js         # Login page logic
-│   │   ├── register.js      # Registration page logic
-│   │   ├── student.js       # Student dashboard logic
-│   │   └── teacher.js       # Teacher dashboard logic
 │   └── icons/
-│       └── icon.svg         # App icon (used by manifest.json)
 ├── demo/
-│   └── demo-data.js         # Sample profiles & attendance records (fictional)
+│   └── demo-data.js
 ├── docs/
 │   ├── README.md
 │   ├── CHANGELOG.md
 │   └── LICENSE
 ├── pages/
-│   ├── register.html          # Registration page
-│   ├── student.html           # Student dashboard
-│   └── teacher.html           # Teacher dashboard
-├── index.html                # Login page (entry point, kept at the root)
-└── manifest.json               # PWA manifest
+│   ├── register.html
+│   ├── student.html
+│   └── teacher.html
+├── index.html
+├── manifest.json
 ```
 
-`index.html` stays at the project root so GitHub Pages (and any static host) serves it as the default entry point. Every other page lives in `pages/` and reaches `assets/`, `demo/`, and `manifest.json` via a relative `../` path.
+---
 
-## Demo Mode
+## Running the Project
+1. Clone the repository.
+```bash
+git clone https://github.com/YOUR_USERNAME/reciscam.git
+```
+2. Open the project folder.
+3. Launch `index.html` using **Live Server** (recommended).
+No installation, backend, or environment variables are required.
 
-The original project used [Supabase](https://supabase.com) (auth + database + storage) as its backend. The portfolio version removes that dependency entirely:
+---
 
-- `demo/demo-data.js` defines a small set of fictional profiles and attendance records.
-- `assets/js/demo-store.js` is a lightweight fake API (`DemoStore`) that reads/writes this data to `localStorage`, mimicking the shape of the original Supabase calls (login, register, submit attendance, approve/reject, notifications).
-- Photo uploads are not actually stored anywhere outside your browser session — only the filename is kept, and the image preview uses a temporary local object URL.
-- Use the two "Coba sebagai Siswa / Guru" buttons on the login page to explore both roles instantly, or register a new demo student.
-- Refreshing the page keeps your changes (they're saved in `localStorage`). To start over, clear your browser's site data for this page.
-- Login/logout and role checks redirect between `index.html` (root) and the pages inside `pages/`, so opening any page directly (e.g. `pages/student.html`) without a demo session will safely bounce you back to the login screen.
+## Demo Workflow
+1. Open the application.
+2. Select one of the demo roles (or register as a new student).
+3. Explore the application.
+4. Changes persist locally in your browser.
+5. Reset the demo database at any time to restore the initial dataset.
 
-## How to Run
+---
 
-No build step or server required.
+## Original Database
+The original implementation used three primary tables.
 
-1. Download or clone this repository.
-2. Open `index.html` directly in a browser, **or**
-3. Serve the folder with any static file server, e.g.:
-   ```bash
-   npx serve .
-   ```
-4. Deploy to GitHub Pages by enabling Pages on the repository (serving from the root or `/docs`, per your GitHub Pages settings) — no configuration files needed.
+| Table | Purpose |
+|--------|---------|
+| `profiles` | User profiles and roles |
+| `attendance` | Piket attendance submissions and status |
+| `notifications` | Approval/rejection alerts for students |
 
-## Limitations
+---
 
-- This is a **demo only** — there is no real authentication, database, or file storage.
-- Data lives only in the current browser's `localStorage` and is not shared between devices or visitors.
-- Photo "uploads" are not persisted as image files; only the filename is recorded.
-- Not intended for production use as-is.
+## Learning Outcomes
+This project provided experience with:
 
-## Future Improvements
+- Designing a complete web application
+- Working with device camera input for file capture
+- Building responsive user interfaces
+- Structuring JavaScript applications
+- Designing relational database schemas
+- Implementing role-based authorization
+- Working with Supabase
+- Creating a frontend-only portfolio demo from a backend application
 
-- Optional: swap `demo-store.js` for a real backend (Supabase, Firebase, or a custom API) without changing the UI layer.
-- Add real image compression/storage for photo proof.
-- Add multi-class / multi-teacher role management.
-- Add automated tests for the demo store logic.
+---
 
-## Author
+## Project Status
+This project is archived as a completed Senior High School project.
 
-Portfolio project maintained as a demonstration of a camera-based school attendance workflow.
+The original backend has been retired. This repository now serves as a self-contained portfolio demonstration that reproduces the application's core functionality without requiring external infrastructure.
+
+---
+
+## License
+This project is available for educational and portfolio purposes.

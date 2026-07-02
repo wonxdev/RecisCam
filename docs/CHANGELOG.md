@@ -1,11 +1,9 @@
 # Changelog
-
 All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [2.1.0] - Page Folder Restructure
-
 ### Changed
 - Moved `register.html`, `student.html`, and `teacher.html` into a new `pages/` folder to keep the project root clean. `index.html` remains at the root as the entry point.
 - Updated all asset references (`assets/`, `demo/`, `manifest.json`) in the moved pages to use relative `../` paths.
@@ -13,7 +11,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated the "Belum punya akun? Daftar" link on the login page to point to `pages/register.html`.
 
 ## [2.0.0] - Portfolio Demo Rebuild
-
 ### Added
 - `demo/demo-data.js` — sample fictional profiles and attendance records to seed the demo.
 - `assets/js/demo-store.js` — a `localStorage`-backed fake backend replacing Supabase.
@@ -38,5 +35,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Removed a live Supabase project URL and anon key that were previously hard-coded in the client-side source.
 
 ## [1.0.0] - Original Project
-
 - Initial version of RecisCam: camera-based piket attendance app using Supabase for authentication, database, and photo storage.
