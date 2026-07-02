@@ -5,15 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Masuk RecisCam</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="manifest" href="public/manifest.json" />
 </head>
 
 <body>
   <main class="container">
     <div class="card">
       <h1>Masuk RecisCam</h1>
-      <p>Silakan masuk untuk melanjutkan.</p>
+      <p>Silakan masuk untuk melanjutkan. Ini adalah demo portofolio — gunakan salah satu akun contoh di bawah.</p>
 
       <label>Email Sekolah</label>
       <input id="email" type="email" placeholder="nama@email.com" />
@@ -23,15 +24,23 @@
 
       <button id="loginBtn">Masuk</button>
 
+      <div class="demo-accounts">
+        <button type="button" data-demo-account="siswa@demo.com">Coba sebagai Siswa</button>
+        <button type="button" data-demo-account="guru@demo.com">Coba sebagai Guru</button>
+      </div>
+
       <div style="text-align:center;">
-        <a href="pages/register.html" class="text-link">Belum punya akun? Daftar</a>
+        <a href="register.html" class="text-link">Belum punya akun? Daftar</a>
       </div>
     </div>
   </main>
 
-  <footer>RecisCam — Sistem Piket Sekolah</footer>
+  <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
 
+  <script src="demo/demo-data.js"></script>
+  <script src="assets/js/demo-store.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/index.js"></script>
 </body>
 
 </html>

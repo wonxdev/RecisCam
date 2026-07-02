@@ -5,19 +5,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RecisCam — Guru</title>
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
+  <!-- Notification Container -->
   <div id="toast-container" class="notification-container"></div>
 
   <div class="container">
     <div class="card" style="margin-bottom:12px;">
       <h2 style="margin-bottom:4px;">Dashboard Guru</h2>
-      <p style="margin-bottom:16px;">Verifikasi laporan piket harian.</p>
+      <p style="margin-bottom:16px;">Verifikasi laporan piket harian (data contoh).</p>
 
       <div style="display:flex; gap:12px;">
-        <select id="dayFilter" onchange="load()" style="margin-bottom:0; flex:2;">
+        <select id="dayFilter" style="margin-bottom:0; flex:2;">
           <option value="all">Semua Hari</option>
           <option value="Senin">Senin</option>
           <option value="Selasa">Selasa</option>
@@ -25,8 +28,8 @@
           <option value="Kamis">Kamis</option>
           <option value="Jumat">Jumat</option>
         </select>
-        <button class="secondary" onclick="exportExcel()" style="margin-top:0; flex:1; padding:10px;">
-          ⬇ CSV
+        <button class="secondary" id="exportBtn" style="margin-top:0; flex:1; padding:10px;">
+          ⬇ Excel
         </button>
       </div>
     </div>
@@ -35,12 +38,16 @@
       <div style="text-align:center; color:var(--text-muted); margin-top:40px;">Memuat data...</div>
     </div>
 
-    <button class="secondary" onclick="logout()" style="margin-top:auto;">Keluar Akun</button>
+    <button class="secondary" id="logoutBtn" style="margin-top:auto;">Keluar Akun</button>
 
-    <footer>RecisCam — Sistem Piket Sekolah</footer>
+    <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
   </div>
 
-  <script src="../assets/js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="demo/demo-data.js"></script>
+  <script src="assets/js/demo-store.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/teacher.js"></script>
 </body>
 
 </html>

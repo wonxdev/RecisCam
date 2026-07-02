@@ -5,15 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar RecisCam</title>
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="manifest" href="../public/manifest.json">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
   <div class="container">
     <div class="card">
       <h1>Daftar Akun</h1>
-      <p>Buat akun baru untuk siswa.</p>
+      <p>Buat akun demo baru untuk siswa. Data hanya disimpan di browser ini.</p>
 
       <label>Email</label>
       <input id="email" type="email" placeholder="nama@email.com">
@@ -46,17 +47,20 @@
         <option>Jumat</option>
       </select>
 
-      <button onclick="register()">Daftar Sekarang</button>
+      <button id="registerBtn">Daftar Sekarang</button>
 
       <div style="text-align:center;">
-        <a href="../index.html" class="text-link">Sudah punya akun? Masuk</a>
+        <a href="index.html" class="text-link">Sudah punya akun? Masuk</a>
       </div>
     </div>
 
-    <footer>RecisCam — Sistem Piket Sekolah</footer>
+    <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
   </div>
 
-  <script src="../assets/js/app.js"></script>
+  <script src="demo/demo-data.js"></script>
+  <script src="assets/js/demo-store.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/register.js"></script>
 </body>
 
 </html>

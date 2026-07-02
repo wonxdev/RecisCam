@@ -1,14 +1,14 @@
 {
-  "name": "RecisCam — Sistem Piket",
+  "name": "RecisCam — Sistem Piket (Portfolio Demo)",
   "short_name": "RecisCam",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f0fdf4",
   "theme_color": "#4ade80",
-  "description": "Aplikasi Absensi Piket Sekolah RecisCam",
+  "description": "Demo absensi piket sekolah berbasis kamera. Versi portofolio, tanpa data nyata.",
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "assets/icons/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }

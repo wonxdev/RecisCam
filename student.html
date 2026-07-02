@@ -5,13 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RecisCam — Siswa</title>
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
+  <!-- Notification Container -->
   <div id="toast-container" class="notification-container"></div>
 
   <div class="container">
+    <!-- Header / Stats -->
     <div class="card" style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: white; border:none;">
       <h2 style="color:white; margin-bottom:8px;">Halo, <span id="userName">Siswa</span>!</h2>
       <p style="color: #dcfce7; margin-bottom:16px;" id="userClass">...</p>
@@ -37,7 +41,7 @@
           <span style="font-size:32px">📷</span>
           <span>Ambil Foto / Pilih File</span>
         </button>
-        <input type="file" id="photo" accept="image/*" capture="environment" onchange="previewFile()">
+        <input type="file" id="photo" accept="image/*" capture="environment">
       </div>
 
       <div id="preview" style="display:none; margin-top:16px;">
@@ -46,7 +50,7 @@
         <img id="previewImg" style="width:100%; border-radius:12px; margin-top:8px; display:none;">
       </div>
 
-      <button onclick="submit()">Kirim Bukti</button>
+      <button id="submitBtn">Kirim Bukti</button>
     </div>
 
     <h3>Riwayat & Jadwal</h3>
@@ -54,12 +58,15 @@
       <p style="text-align:center;">Memuat jadwal...</p>
     </div>
 
-    <button class="secondary" onclick="logout()" style="margin-top:auto;">Keluar</button>
+    <button class="secondary" id="logoutBtn" style="margin-top:auto;">Keluar</button>
 
-    <footer>RecisCam — Sistem Piket Sekolah</footer>
+    <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
   </div>
 
-  <script src="../assets/js/app.js"></script>
+  <script src="demo/demo-data.js"></script>
+  <script src="assets/js/demo-store.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/student.js"></script>
 </body>
 
 </html>
