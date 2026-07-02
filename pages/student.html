@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecisCam — Siswa</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+  <div id="toast-container" class="notification-container"></div>
+
+  <div class="container">
+    <div class="card" style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: white; border:none;">
+      <h2 style="color:white; margin-bottom:8px;">Halo, <span id="userName">Siswa</span>!</h2>
+      <p style="color: #dcfce7; margin-bottom:16px;" id="userClass">...</p>
+
+      <div style="display:flex; gap:16px;">
+        <div style="background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:12px; flex:1;">
+          <small style="display:block; opacity:0.8;">Jadwal Piket</small>
+          <div style="font-weight:700; font-size:1.1rem;" id="piketDay">...</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:12px; flex:1;">
+          <small style="display:block; opacity:0.8;">Peringatan</small>
+          <div style="font-weight:700; font-size:1.1rem;" id="warningCount">0/3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Upload Bukti Piket</h3>
+      <span class="status-text">Pastikan foto terlihat jelas. Batas upload pukul 15.00 WIB.</span>
+
+      <div class="file-input-wrapper">
+        <button class="btn-upload" type="button">
+          <span style="font-size:32px">📷</span>
+          <span>Ambil Foto / Pilih File</span>
+        </button>
+        <input type="file" id="photo" accept="image/*" capture="environment" onchange="previewFile()">
+      </div>
+
+      <div id="preview" style="display:none; margin-top:16px;">
+        <p style="margin-bottom:8px; font-size:0.875rem;">File terpilih:</p>
+        <div style="font-weight:600;" id="filename"></div>
+        <img id="previewImg" style="width:100%; border-radius:12px; margin-top:8px; display:none;">
+      </div>
+
+      <button onclick="submit()">Kirim Bukti</button>
+    </div>
+
+    <h3>Riwayat & Jadwal</h3>
+    <div id="scheduleList">
+      <p style="text-align:center;">Memuat jadwal...</p>
+    </div>
+
+    <button class="secondary" onclick="logout()" style="margin-top:auto;">Keluar</button>
+
+    <footer>RecisCam — Sistem Piket Sekolah</footer>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+
+</html>

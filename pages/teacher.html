@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecisCam — Guru</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+  <div id="toast-container" class="notification-container"></div>
+
+  <div class="container">
+    <div class="card" style="margin-bottom:12px;">
+      <h2 style="margin-bottom:4px;">Dashboard Guru</h2>
+      <p style="margin-bottom:16px;">Verifikasi laporan piket harian.</p>
+
+      <div style="display:flex; gap:12px;">
+        <select id="dayFilter" onchange="load()" style="margin-bottom:0; flex:2;">
+          <option value="all">Semua Hari</option>
+          <option value="Senin">Senin</option>
+          <option value="Selasa">Selasa</option>
+          <option value="Rabu">Rabu</option>
+          <option value="Kamis">Kamis</option>
+          <option value="Jumat">Jumat</option>
+        </select>
+        <button class="secondary" onclick="exportExcel()" style="margin-top:0; flex:1; padding:10px;">
+          ⬇ CSV
+        </button>
+      </div>
+    </div>
+
+    <div id="list">
+      <div style="text-align:center; color:var(--text-muted); margin-top:40px;">Memuat data...</div>
+    </div>
+
+    <button class="secondary" onclick="logout()" style="margin-top:auto;">Keluar Akun</button>
+
+    <footer>RecisCam — Sistem Piket Sekolah</footer>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+
+</html>
