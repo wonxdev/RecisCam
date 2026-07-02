@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Already "logged in"? Skip straight to the right dashboard.
   const existing = DemoStore.currentProfile();
   if (existing) {
-    window.location.href = existing.role === "student" ? "student.html" : "teacher.html";
+    window.location.href = existing.role === "student" ? "pages/student.html" : "pages/teacher.html";
     return;
   }
 
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    window.location.href = result.profile.role === "student" ? "student.html" : "teacher.html";
+    window.location.href = result.profile.role === "student" ? "pages/student.html" : "pages/teacher.html";
   }
 
   btn.addEventListener("click", attemptLogin);

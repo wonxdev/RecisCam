@@ -10,7 +10,7 @@ const DEMO_SEED = {
       id: "teacher-01",
       email: "guru@demo.com",
       role: "teacher",
-      full_name: "Bu Yuli",
+      full_name: "Bu Sarah",
       class: null,
       piket_day: null
     },
@@ -18,7 +18,7 @@ const DEMO_SEED = {
       id: "student-01",
       email: "siswa@demo.com",
       role: "student",
-      full_name: "Sonny Erwin Soebiantoro",
+      full_name: "Dimas Pratama",
       class: "XII A",
       piket_day: "Senin"
     },
@@ -26,7 +26,7 @@ const DEMO_SEED = {
       id: "student-02",
       email: "aulia@demo.com",
       role: "student",
-      full_name: "Nathan Suwiji",
+      full_name: "Aulia Rahman",
       class: "XII B",
       piket_day: "Selasa"
     },
@@ -34,7 +34,7 @@ const DEMO_SEED = {
       id: "student-03",
       email: "bayu@demo.com",
       role: "student",
-      full_name: "Nathaniel Edrick Ferdianto",
+      full_name: "Bayu Saputra",
       class: "XII A",
       piket_day: "Rabu"
     }

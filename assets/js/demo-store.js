@@ -178,6 +178,7 @@ const DemoStore = (() => {
   }
 
   /* ---------- Notifications ---------- */
+
   function listUnreadNotifications(userId) {
     return getDB().notifications.filter(
       n => n.user_id === userId && !n.is_read

@@ -7,16 +7,19 @@
 function renderDemoBadge() {
   const badge = document.createElement("div");
   badge.className = "demo-badge";
-  badge.innerHTML = "Portfolio Demo - data contoh, tidak tersimpan ke server";
+  badge.innerHTML = "🧪 Portfolio Demo — data contoh, tidak tersimpan ke server";
   document.body.prepend(badge);
 }
 
 // Redirects to index.html if no demo session exists, or to the wrong
 // dashboard if the logged-in role doesn't match the page.
+// NOTE: requireRole() and logoutAndRedirect() are only used by pages inside
+// /pages/ (student.html, teacher.html), so their redirects are relative to
+// that subfolder (one level up to reach the root index.html).
 function requireRole(role) {
   const profile = DemoStore.currentProfile();
   if (!profile) {
-    window.location.replace("index.html");
+    window.location.replace("../index.html");
     return null;
   }
   if (profile.role !== role) {
@@ -28,7 +31,7 @@ function requireRole(role) {
 
 function logoutAndRedirect() {
   DemoStore.logout();
-  window.location.replace("index.html");
+  window.location.replace("../index.html");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
