@@ -7,7 +7,7 @@
 function renderDemoBadge() {
   const badge = document.createElement("div");
   badge.className = "demo-badge";
-  badge.innerHTML = "🧪 Portfolio Demo — data contoh, tidak tersimpan ke server";
+  badge.innerHTML = "Portfolio Demo - data contoh, tidak tersimpan ke server";
   document.body.prepend(badge);
 }
 
