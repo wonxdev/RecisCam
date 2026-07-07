@@ -4,38 +4,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Masuk RecisCam</title>
+  <meta name="theme-color" content="#0b0e14" />
+  <title>Masuk — RecisCam</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
 <body>
-  <main class="container">
-    <div class="card">
-      <h1>Masuk RecisCam</h1>
-      <p>Silakan masuk untuk melanjutkan. Ini adalah demo portofolio — gunakan salah satu akun contoh di bawah.</p>
+  <div id="toast-container" class="toast-container"></div>
 
-      <label>Email Sekolah</label>
-      <input id="email" type="email" placeholder="nama@email.com" />
-
-      <label>Kata Sandi</label>
-      <input id="password" type="password" placeholder="••••••••" />
-
-      <button id="loginBtn">Masuk</button>
-
-      <div class="demo-accounts">
-        <button type="button" data-demo-account="siswa@demo.com">Coba sebagai Siswa</button>
-        <button type="button" data-demo-account="guru@demo.com">Coba sebagai Guru</button>
+  <main class="auth">
+    <div class="card auth-card">
+      <div class="auth-brand">
+        <img class="brand-mark" src="assets/icons/icon.svg" alt="" />
+        <span class="brand-name">RecisCam</span>
       </div>
 
-      <div style="text-align:center;">
-        <a href="pages/register.html" class="text-link">Belum punya akun? Daftar</a>
+      <h1 class="auth-title">Selamat datang kembali</h1>
+      <p class="auth-subtitle">Masuk untuk melanjutkan. Ini demo portofolio — gunakan salah satu akun contoh di bawah.</p>
+
+      <form id="loginForm" class="form" novalidate>
+        <div class="field">
+          <label for="email">Email Sekolah</label>
+          <input id="email" type="email" placeholder="nama@email.com" autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label for="password">Kata Sandi</label>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+
+        <button id="loginBtn" type="submit" class="btn btn-primary btn-block">Masuk</button>
+      </form>
+
+      <div class="divider"><span>atau coba sebagai</span></div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" data-demo-account="siswa@demo.com">Siswa</button>
+        <button type="button" class="btn btn-secondary" data-demo-account="guru@demo.com">Guru</button>
       </div>
+
+      <p class="auth-alt">Belum punya akun? <a href="pages/register.html" class="text-link">Daftar</a></p>
     </div>
-  </main>
 
-  <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
+    <footer class="auth-footer">RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
+  </main>
 
   <script src="demo/demo-data.js"></script>
   <script src="assets/js/demo-store.js"></script>

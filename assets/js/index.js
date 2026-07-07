@@ -14,29 +14,32 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  const form = document.getElementById("loginForm");
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
-  const btn = document.getElementById("loginBtn");
 
   function attemptLogin() {
     const email = emailInput.value.trim();
     const password = passwordInput.value;
 
     if (!email || !password) {
-      alert("Email dan kata sandi wajib diisi.");
+      showToast("Email dan kata sandi wajib diisi.", "danger");
       return;
     }
 
     const result = DemoStore.login(email);
     if (result.error) {
-      alert(result.error);
+      showToast(result.error, "danger");
       return;
     }
 
     window.location.href = result.profile.role === "student" ? "pages/student.html" : "pages/teacher.html";
   }
 
-  btn.addEventListener("click", attemptLogin);
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    attemptLogin();
+  });
 
   document.querySelectorAll("[data-demo-account]").forEach(el => {
     el.addEventListener("click", () => {

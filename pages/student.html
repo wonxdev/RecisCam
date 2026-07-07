@@ -4,64 +4,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RecisCam — Siswa</title>
+  <meta name="theme-color" content="#0b0e14" />
+  <title>Dasbor Siswa — RecisCam</title>
   <link rel="manifest" href="../manifest.json" />
   <link rel="icon" href="../assets/icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-  <!-- Notification Container -->
-  <div id="toast-container" class="notification-container"></div>
+  <div id="toast-container" class="toast-container"></div>
 
-  <div class="container">
-    <!-- Header / Stats -->
-    <div class="card" style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: white; border:none;">
-      <h2 style="color:white; margin-bottom:8px;">Halo, <span id="userName">Siswa</span>!</h2>
-      <p style="color: #dcfce7; margin-bottom:16px;" id="userClass">...</p>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="student.html">
+        <img class="brand-mark" src="../assets/icons/icon.svg" alt="" />
+        <span class="brand-name">RecisCam</span>
+      </a>
+      <button id="logoutBtn" class="btn btn-ghost btn-sm" type="button">Keluar</button>
+    </div>
+  </header>
 
-      <div style="display:flex; gap:16px;">
-        <div style="background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:12px; flex:1;">
-          <small style="display:block; opacity:0.8;">Jadwal Piket</small>
-          <div style="font-weight:700; font-size:1.1rem;" id="piketDay">...</div>
+  <main class="container page-content">
+    <section class="card">
+      <p class="eyebrow">Dasbor Siswa</p>
+      <h1 class="hero-title">Halo, <span id="userName">Siswa</span></h1>
+      <p class="hero-sub" id="userClass">…</p>
+
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat-label">Jadwal Piket</span>
+          <span class="stat-value" id="piketDay">…</span>
         </div>
-        <div style="background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:12px; flex:1;">
-          <small style="display:block; opacity:0.8;">Peringatan</small>
-          <div style="font-weight:700; font-size:1.1rem;" id="warningCount">0/3</div>
+        <div class="stat">
+          <span class="stat-label">Peringatan</span>
+          <span class="stat-value" id="warningCount">0/3</span>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <h3>Upload Bukti Piket</h3>
-      <span class="status-text">Pastikan foto terlihat jelas. Batas upload pukul 15.00 WIB.</span>
+    <section class="card">
+      <h2 class="card-title">Upload Bukti Piket</h2>
+      <p class="card-desc">Pastikan foto terlihat jelas. Batas upload pukul 15.00 WIB.</p>
 
       <div class="file-input-wrapper">
-        <button class="btn-upload" type="button">
-          <span style="font-size:32px">📷</span>
+        <button class="upload-drop" type="button">
+          <span class="upload-icon" aria-hidden="true">📷</span>
           <span>Ambil Foto / Pilih File</span>
         </button>
-        <input type="file" id="photo" accept="image/*" capture="environment">
+        <input type="file" id="photo" accept="image/*" capture="environment" aria-label="Pilih foto bukti piket">
       </div>
 
-      <div id="preview" style="display:none; margin-top:16px;">
-        <p style="margin-bottom:8px; font-size:0.875rem;">File terpilih:</p>
-        <div style="font-weight:600;" id="filename"></div>
-        <img id="previewImg" style="width:100%; border-radius:12px; margin-top:8px; display:none;">
+      <div id="preview" class="upload-preview" hidden>
+        <span class="upload-filename" id="filename"></span>
+        <img id="previewImg" alt="Pratinjau bukti piket" hidden>
       </div>
 
-      <button id="submitBtn">Kirim Bukti</button>
-    </div>
+      <button id="submitBtn" class="btn btn-primary btn-block mt-5" type="button">Kirim Bukti</button>
+    </section>
 
-    <h3>Riwayat & Jadwal</h3>
-    <div id="scheduleList">
-      <p style="text-align:center;">Memuat jadwal...</p>
-    </div>
+    <section>
+      <h2 class="section-title">Riwayat &amp; Jadwal</h2>
+      <div id="scheduleList" class="list">
+        <div class="empty-state">Memuat jadwal…</div>
+      </div>
+    </section>
+  </main>
 
-    <button class="secondary" id="logoutBtn" style="margin-top:auto;">Keluar</button>
-
-    <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
-  </div>
+  <footer class="page-footer">RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
 
   <script src="../demo/demo-data.js"></script>
   <script src="../assets/js/demo-store.js"></script>

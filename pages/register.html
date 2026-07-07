@@ -4,58 +4,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar RecisCam</title>
+  <meta name="theme-color" content="#0b0e14" />
+  <title>Daftar — RecisCam</title>
   <link rel="manifest" href="../manifest.json" />
   <link rel="icon" href="../assets/icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="card">
-      <h1>Daftar Akun</h1>
-      <p>Buat akun demo baru untuk siswa. Data hanya disimpan di browser ini.</p>
+  <div id="toast-container" class="toast-container"></div>
 
-      <label>Email</label>
-      <input id="email" type="email" placeholder="nama@email.com">
-
-      <label>Kata Sandi</label>
-      <input id="password" type="password" placeholder="••••••••">
-
-      <label>Kelas</label>
-      <select id="kelas">
-        <option value="" disabled selected>Pilih Kelas</option>
-        <option>XII A</option>
-        <option>XII B</option>
-        <option>XII C</option>
-        <option>XII D</option>
-        <option>XII E</option>
-        <option>XII F</option>
-        <option>XII G</option>
-        <option>XII H</option>
-        <option>XII I</option>
-        <option>XII J</option>
-      </select>
-
-      <label>Hari Piket</label>
-      <select id="piketDay">
-        <option value="" disabled selected>Pilih Hari</option>
-        <option>Senin</option>
-        <option>Selasa</option>
-        <option>Rabu</option>
-        <option>Kamis</option>
-        <option>Jumat</option>
-      </select>
-
-      <button id="registerBtn">Daftar Sekarang</button>
-
-      <div style="text-align:center;">
-        <a href="../index.html" class="text-link">Sudah punya akun? Masuk</a>
+  <main class="auth">
+    <div class="card auth-card">
+      <div class="auth-brand">
+        <img class="brand-mark" src="../assets/icons/icon.svg" alt="" />
+        <span class="brand-name">RecisCam</span>
       </div>
+
+      <h1 class="auth-title">Buat akun baru</h1>
+      <p class="auth-subtitle">Akun demo untuk siswa. Data hanya disimpan di browser ini.</p>
+
+      <form id="registerForm" class="form" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="nama@email.com" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Kata Sandi</label>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="new-password" required>
+        </div>
+
+        <div class="field">
+          <label for="kelas">Kelas</label>
+          <select id="kelas" required>
+            <option value="" disabled selected>Pilih Kelas</option>
+            <option>XII A</option>
+            <option>XII B</option>
+            <option>XII C</option>
+            <option>XII D</option>
+            <option>XII E</option>
+            <option>XII F</option>
+            <option>XII G</option>
+            <option>XII H</option>
+            <option>XII I</option>
+            <option>XII J</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="piketDay">Hari Piket</label>
+          <select id="piketDay" required>
+            <option value="" disabled selected>Pilih Hari</option>
+            <option>Senin</option>
+            <option>Selasa</option>
+            <option>Rabu</option>
+            <option>Kamis</option>
+            <option>Jumat</option>
+          </select>
+        </div>
+
+        <button id="registerBtn" type="submit" class="btn btn-primary btn-block">Daftar Sekarang</button>
+      </form>
+
+      <p class="auth-alt">Sudah punya akun? <a href="../index.html" class="text-link">Masuk</a></p>
     </div>
 
-    <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
-  </div>
+    <footer class="auth-footer">RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
+  </main>
 
   <script src="../demo/demo-data.js"></script>
   <script src="../assets/js/demo-store.js"></script>

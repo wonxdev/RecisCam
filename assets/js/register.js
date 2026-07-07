@@ -6,31 +6,34 @@
 document.addEventListener("DOMContentLoaded", () => {
   DemoStore.init();
 
+  const form = document.getElementById("registerForm");
   const btn = document.getElementById("registerBtn");
-  btn.addEventListener("click", () => {
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const kelas = document.getElementById("kelas").value;
     const piketDay = document.getElementById("piketDay").value;
 
     if (!email || !password || !kelas || !piketDay) {
-      alert("Semua kolom wajib diisi!");
+      showToast("Semua kolom wajib diisi.", "danger");
       return;
     }
 
     btn.disabled = true;
-    btn.innerText = "Memproses...";
+    btn.textContent = "Memproses…";
 
     const result = DemoStore.register({ email, kelas, piketDay });
 
     if (result.error) {
-      alert("Gagal daftar: " + result.error);
+      showToast(result.error, "danger");
       btn.disabled = false;
-      btn.innerText = "Daftar Sekarang";
+      btn.textContent = "Daftar Sekarang";
       return;
     }
 
-    alert("Pendaftaran berhasil! Selamat datang di demo RecisCam.");
     window.location.href = "student.html";
   });
 });

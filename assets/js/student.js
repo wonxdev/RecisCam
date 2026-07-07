@@ -14,16 +14,16 @@ function statusLabel(status) {
   switch (status) {
     case "approved":
     case "present":
-      return { badgeClass: "approved", label: "Hadir" };
+      return { badgeClass: "badge-success", label: "Hadir" };
     case "rejected":
     case "absent":
-      return { badgeClass: "rejected", label: "Ditolak" };
+      return { badgeClass: "badge-danger", label: "Ditolak" };
     case "pending":
-      return { badgeClass: "pending", label: "Menunggu" };
+      return { badgeClass: "badge-warning", label: "Menunggu" };
     case "upcoming":
-      return { badgeClass: "pending", label: "Jadwal Hari Ini" };
+      return { badgeClass: "badge-warning", label: "Jadwal Hari Ini" };
     default:
-      return { badgeClass: "missed", label: "Terlewat" };
+      return { badgeClass: "badge-danger", label: "Terlewat" };
   }
 }
 
@@ -68,21 +68,21 @@ function renderSchedule() {
   const { rows, warnings } = buildScheduleRows();
 
   const warningEl = document.getElementById("warningCount");
-  warningEl.innerText = `${warnings}/3`;
-  if (warnings >= 3) warningEl.style.color = "#f87171";
+  warningEl.textContent = `${warnings}/3`;
+  warningEl.classList.toggle("is-danger", warnings >= 3);
 
   const html = rows
     .map(item => {
       const dateStr = item.date.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
       const { badgeClass, label } = statusLabel(item.status);
       const note = item.match && item.match.note
-        ? `<small style="color:var(--danger-text)">Catatan Guru: ${item.match.note}</small>`
+        ? `<span class="list-row-note">Catatan Guru: ${item.match.note}</span>`
         : "";
 
       return `
-        <div class="card" style="padding:16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="list-row">
           <div>
-            <div style="font-weight:600;">${dateStr}</div>
+            <div class="list-row-title">${dateStr}</div>
             ${note}
           </div>
           <span class="badge ${badgeClass}">${label}</span>
@@ -90,22 +90,18 @@ function renderSchedule() {
     })
     .join("");
 
-  document.getElementById("scheduleList").innerHTML = html || "<p style='text-align:center;'>Belum ada jadwal.</p>";
+  document.getElementById("scheduleList").innerHTML =
+    html || `<div class="empty-state">Belum ada jadwal.</div>`;
 }
 
 function renderNotifications() {
   const unread = DemoStore.listUnreadNotifications(profile.id);
-  const container = document.getElementById("toast-container");
 
   unread.forEach(n => {
-    const div = document.createElement("div");
-    div.className = "notification-toast";
-    div.innerHTML = `<span>${n.message}</span><button class="close-toast">×</button>`;
-    div.querySelector(".close-toast").addEventListener("click", () => {
-      div.remove();
-      DemoStore.dismissNotification(n.id);
+    showToast(n.message, "info", {
+      sticky: true,
+      onClose: () => DemoStore.dismissNotification(n.id)
     });
-    container.appendChild(div);
   });
 }
 
@@ -114,29 +110,39 @@ function previewFile() {
   selectedFile = input.files[0];
   if (!selectedFile) return;
 
-  document.getElementById("preview").style.display = "block";
-  document.getElementById("filename").innerText = selectedFile.name;
+  document.getElementById("preview").hidden = false;
+  document.getElementById("filename").textContent = selectedFile.name;
 
   const img = document.getElementById("previewImg");
-  img.style.display = "block";
+  img.hidden = false;
   img.src = URL.createObjectURL(selectedFile);
+}
+
+function resetUploadForm() {
+  selectedFile = null;
+  document.getElementById("photo").value = "";
+  document.getElementById("preview").hidden = true;
+  document.getElementById("previewImg").hidden = true;
 }
 
 function submitAttendance() {
   if (!selectedFile) {
-    alert("Pilih foto terlebih dahulu!");
+    showToast("Pilih foto terlebih dahulu.", "danger");
     return;
   }
 
   const btn = document.getElementById("submitBtn");
-  btn.innerText = "Mengirim...";
+  btn.textContent = "Mengirim…";
   btn.disabled = true;
 
   DemoStore.submitAttendance(profile.id, selectedFile.name);
 
   setTimeout(() => {
-    alert("✅ Laporan piket berhasil dikirim! (data demo)");
-    location.reload();
+    showToast("Laporan piket berhasil dikirim (data demo).", "success");
+    resetUploadForm();
+    renderSchedule();
+    btn.textContent = "Kirim Bukti";
+    btn.disabled = false;
   }, 300);
 }
 
@@ -144,9 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
   profile = requireRole("student");
   if (!profile) return;
 
-  document.getElementById("userName").innerText = profile.full_name || profile.email.split("@")[0];
-  document.getElementById("userClass").innerText = profile.class || "Kelas Tidak Ada";
-  document.getElementById("piketDay").innerText = profile.piket_day || "-";
+  document.getElementById("userName").textContent = profile.full_name || profile.email.split("@")[0];
+  document.getElementById("userClass").textContent = profile.class || "Kelas Tidak Ada";
+  document.getElementById("piketDay").textContent = profile.piket_day || "-";
 
   renderSchedule();
   renderNotifications();

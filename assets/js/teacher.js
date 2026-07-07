@@ -8,11 +8,11 @@ let cachedData = [];
 
 function statusBadge(status) {
   const s = (status || "").toLowerCase();
-  if (["present", "approved", "hadir"].includes(s)) return { badgeClass: "approved", label: "Hadir" };
-  if (["absent", "rejected", "ditolak"].includes(s)) return { badgeClass: "rejected", label: "Ditolak" };
-  if (["late", "terlambat"].includes(s)) return { badgeClass: "pending", label: "Terlambat" };
-  if (["overdue", "terlewat", "missed"].includes(s)) return { badgeClass: "rejected", label: "Terlewat" };
-  return { badgeClass: "pending", label: "Menunggu" };
+  if (["present", "approved", "hadir"].includes(s)) return { badgeClass: "badge-success", label: "Hadir" };
+  if (["absent", "rejected", "ditolak"].includes(s)) return { badgeClass: "badge-danger", label: "Ditolak" };
+  if (["late", "terlambat"].includes(s)) return { badgeClass: "badge-warning", label: "Terlambat" };
+  if (["overdue", "terlewat", "missed"].includes(s)) return { badgeClass: "badge-danger", label: "Terlewat" };
+  return { badgeClass: "badge-warning", label: "Menunggu" };
 }
 
 function loadList() {
@@ -27,7 +27,7 @@ function loadList() {
   cachedData = data;
 
   if (data.length === 0) {
-    listEl.innerHTML = `<div style="text-align:center; margin-top:40px;">Belum ada laporan masuk.</div>`;
+    listEl.innerHTML = `<div class="empty-state">Belum ada laporan masuk.</div>`;
     return;
   }
 
@@ -43,30 +43,30 @@ function loadList() {
       const piket = a.profile.piket_day || "-";
 
       return `
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <article class="card report-card">
+          <div class="report-head">
             <div>
-              <div style="font-weight:700; font-size:1.1rem;">${name} (${className})</div>
-              <small style="color:var(--text-muted);">${piket} • ${dateStr} ${timeStr}</small>
+              <div class="report-name">${name} <span class="report-class">· ${className}</span></div>
+              <div class="report-meta">${piket} • ${dateStr} ${timeStr}</div>
             </div>
             <span class="badge ${badgeClass}">${label}</span>
           </div>
 
-          <div style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:8px;">
-            <small style="display:block; color:var(--text-muted);">Bukti Dukung:</small>
-            <span style="color:var(--primary); font-weight:500;">${a.photo_name || "Tidak Ada"} (contoh)</span>
+          <div class="report-proof">
+            <span class="report-proof-label">Bukti dukung</span>
+            <span class="report-proof-file">${a.photo_name || "Tidak Ada"} (contoh)</span>
           </div>
 
-          <div style="margin-bottom:12px;">
-            <label style="margin-top:0;">Catatan Guru</label>
-            <input type="text" id="note_${a.id}" value="${a.note || ""}" placeholder="Feedback...">
+          <div class="field">
+            <label for="note_${a.id}">Catatan Guru</label>
+            <input type="text" id="note_${a.id}" value="${a.note || ""}" placeholder="Feedback…">
           </div>
 
-          <div class="actions">
-            <button class="success" data-action="present" data-id="${a.id}">Terima</button>
-            <button class="danger" data-action="absent" data-id="${a.id}">Tolak</button>
+          <div class="btn-row">
+            <button class="btn btn-success" data-action="present" data-id="${a.id}">Terima</button>
+            <button class="btn btn-danger" data-action="absent" data-id="${a.id}">Tolak</button>
           </div>
-        </div>`;
+        </article>`;
     })
     .join("");
 
@@ -80,7 +80,7 @@ function updateStatus(id, status, btn) {
   const note = noteInput ? noteInput.value : "";
 
   btn.disabled = true;
-  btn.innerText = "...";
+  btn.textContent = "…";
 
   DemoStore.updateAttendanceStatus(id, status, note);
   loadList();
@@ -88,7 +88,7 @@ function updateStatus(id, status, btn) {
 
 function exportExcel() {
   if (!cachedData.length) {
-    alert("Kosong!");
+    showToast("Belum ada data untuk diekspor.", "danger");
     return;
   }
   const ws = XLSX.utils.json_to_sheet(

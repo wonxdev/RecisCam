@@ -4,23 +4,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RecisCam — Guru</title>
+  <meta name="theme-color" content="#0b0e14" />
+  <title>Dasbor Guru — RecisCam</title>
   <link rel="manifest" href="../manifest.json" />
   <link rel="icon" href="../assets/icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-  <!-- Notification Container -->
-  <div id="toast-container" class="notification-container"></div>
+  <div id="toast-container" class="toast-container"></div>
 
-  <div class="container">
-    <div class="card" style="margin-bottom:12px;">
-      <h2 style="margin-bottom:4px;">Dashboard Guru</h2>
-      <p style="margin-bottom:16px;">Verifikasi laporan piket harian (data contoh).</p>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="teacher.html">
+        <img class="brand-mark" src="../assets/icons/icon.svg" alt="" />
+        <span class="brand-name">RecisCam</span>
+      </a>
+      <button id="logoutBtn" class="btn btn-ghost btn-sm" type="button">Keluar</button>
+    </div>
+  </header>
 
-      <div style="display:flex; gap:12px;">
-        <select id="dayFilter" style="margin-bottom:0; flex:2;">
+  <main class="container page-content">
+    <section class="card">
+      <p class="eyebrow">Dasbor Guru</p>
+      <h1 class="hero-title">Laporan Piket</h1>
+      <p class="hero-sub">Verifikasi laporan piket harian (data contoh).</p>
+
+      <div class="toolbar">
+        <select id="dayFilter" aria-label="Filter hari piket">
           <option value="all">Semua Hari</option>
           <option value="Senin">Senin</option>
           <option value="Selasa">Selasa</option>
@@ -28,20 +39,16 @@
           <option value="Kamis">Kamis</option>
           <option value="Jumat">Jumat</option>
         </select>
-        <button class="secondary" id="exportBtn" style="margin-top:0; flex:1; padding:10px;">
-          ⬇ Excel
-        </button>
+        <button class="btn btn-secondary" id="exportBtn" type="button">Ekspor Excel</button>
       </div>
-    </div>
+    </section>
 
-    <div id="list">
-      <div style="text-align:center; color:var(--text-muted); margin-top:40px;">Memuat data...</div>
-    </div>
+    <section id="list" class="list">
+      <div class="empty-state">Memuat data…</div>
+    </section>
+  </main>
 
-    <button class="secondary" id="logoutBtn" style="margin-top:auto;">Keluar Akun</button>
-
-    <footer>RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
-  </div>
+  <footer class="page-footer">RecisCam — Sistem Piket Sekolah (Portfolio Demo)</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="../demo/demo-data.js"></script>

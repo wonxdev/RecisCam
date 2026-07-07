@@ -8,18 +8,32 @@
 const DemoStore = (() => {
   const DB_KEY = "reciscam_demo_db";
   const SESSION_KEY = "reciscam_demo_session";
-  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  const PIKET_DAY_INDEX = { Minggu: 0, Senin: 1, Selasa: 2, Rabu: 3, Kamis: 4, Jumat: 5, Sabtu: 6 };
+
+  // Most recent date (today or earlier) that falls on the profile's piket day.
+  function lastPiketDate(piketDay) {
+    const date = new Date();
+    date.setHours(8, 0, 0, 0);
+    const target = PIKET_DAY_INDEX[piketDay] ?? date.getDay();
+    date.setDate(date.getDate() - ((date.getDay() - target + 7) % 7));
+    return date;
+  }
 
   function buildSeedAttendance() {
-    const now = Date.now();
-    return DEMO_SEED.attendance.map((a, i) => ({
-      id: `seed-att-${i}`,
-      user_id: a.userId,
-      status: a.status,
-      note: a.note || "",
-      photo_name: "bukti-piket.jpg",
-      created_at: new Date(now - a.daysAgo * DAY_MS).toISOString()
-    }));
+    return DEMO_SEED.attendance.map((a, i) => {
+      const profile = DEMO_SEED.profiles.find(p => p.id === a.userId);
+      const date = lastPiketDate(profile ? profile.piket_day : null);
+      date.setDate(date.getDate() - a.weeksAgo * 7);
+      return {
+        id: `seed-att-${i}`,
+        user_id: a.userId,
+        status: a.status,
+        note: a.note || "",
+        photo_name: "bukti-piket.jpg",
+        created_at: date.toISOString()
+      };
+    });
   }
 
   function buildSeedNotifications() {

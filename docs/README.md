@@ -39,6 +39,17 @@ For portfolio purposes, the original Supabase backend has been replaced with a L
 
 ---
 
+## Design
+The UI is built on a small centralized design system (`assets/css/style.css`):
+
+- Dark theme by default — modern, minimal, high contrast
+- CSS custom properties for colors, spacing, radius, elevation, and motion
+- Reusable component classes (buttons, cards, forms, badges, lists, toasts, empty states) shared across every page
+- Subtle fade/scale animations with `prefers-reduced-motion` support
+- Responsive layout that adapts from desktop to mobile without separate designs
+
+---
+
 ## Tech Stack
 ### Frontend
 - HTML5

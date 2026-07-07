@@ -40,14 +40,18 @@ const DEMO_SEED = {
     }
   ],
 
-  // created_at values are generated at seed time (relative to "today")
-  // so the demo always looks current. See demo-store.js:buildSeedAttendance().
+  // Each record lands on the student's actual piket weekday, `weeksAgo`
+  // weeks before the most recent one, so the demo looks current and
+  // consistent no matter which day it is opened.
+  // See demo-store.js:buildSeedAttendance().
   attendance: [
-    { userId: "student-01", daysAgo: 7, status: "present", note: "" },
-    { userId: "student-01", daysAgo: 0, status: "pending", note: "" },
-    { userId: "student-02", daysAgo: 6, status: "present", note: "" },
-    { userId: "student-02", daysAgo: 13, status: "absent", note: "Tidak ada bukti foto" },
-    { userId: "student-03", daysAgo: 8, status: "present", note: "" }
+    { userId: "student-01", weeksAgo: 0, status: "pending", note: "" },
+    { userId: "student-01", weeksAgo: 1, status: "present", note: "" },
+    { userId: "student-01", weeksAgo: 2, status: "present", note: "" },
+    { userId: "student-01", weeksAgo: 3, status: "present", note: "" },
+    { userId: "student-02", weeksAgo: 0, status: "present", note: "" },
+    { userId: "student-02", weeksAgo: 1, status: "absent", note: "Tidak ada bukti foto" },
+    { userId: "student-03", weeksAgo: 0, status: "present", note: "" }
   ],
 
   notifications: [
